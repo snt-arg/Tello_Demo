@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 import math
 import time 
-import pandas
 
 '''Drone = tello.Tello()
 Drone.connect()
