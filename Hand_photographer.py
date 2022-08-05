@@ -1,5 +1,7 @@
 #Tello_hand_position_photographer
-#to export images from this your stream top your folder,you have to be(/have to open) in the correect workspace, which represents your file
+
+#there is a problem with the export of the images of this script: they are simply put in the same ordner you are working
+#This script is compatible with the Tello drone
 from cvzone.HandTrackingModule import HandDetector
 from djitellopy import tello
 import cv2
@@ -10,15 +12,23 @@ import time
 '''Drone = tello.Tello()
 Drone.connect()
 Drone.streamon()'''
+#comment/uncomment those lines if you want to implement/exclude Tello
+#for Tello
+
 cap = cv2.VideoCapture(0)
+#comment/uncomment this line(16) if you want to implement/exclude Tello
+#for Webcam
 
 detector = HandDetector(maxHands=1)
 counter = 0
 offset = 20
 imgSize = 224
 folder = "Tello_Stop"
-while True:   #img = Drone.get_frame_read().frame
+while True:   
+    '''img = Drone.get_frame_read().frame'''
+    #for Tello
     success,img = cap.read()
+    #for Webcam
     hands, img = detector.findHands(img)
     if hands:
         hand = hands[0]
@@ -67,4 +77,5 @@ while True:   #img = Drone.get_frame_read().frame
         counter += 1
         print(counter)
     if key ==ord("q"):
+        #Drone.streamoff()
         break
