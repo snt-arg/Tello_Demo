@@ -22,9 +22,9 @@ cap = cv2.VideoCapture(0)
 detector = HandDetector(maxHands=1)
 offset = 20
 imgSize = 300
-classifier = Classifier("converted_keras (1)/keras_model.h5","converted_keras (1)/labels.txt")
+classifier = Classifier("keras_model.h5","labels.txt")
 #Classifier = load_model("mp_handgesture")
-labels = ["Up","Stop","Class 3"]
+labels = ["Go","Stop","Up"]
 
 while True:
     #img = Drone.get_frame_read().frame

@@ -22,7 +22,7 @@ cap = cv2.VideoCapture(0)
 detector = HandDetector(maxHands=1)
 counter = 0
 offset = 20
-imgSize = 224
+imgSize = 300
 folder = "Tello_Stop"
 while True:   
     '''img = Drone.get_frame_read().frame'''
