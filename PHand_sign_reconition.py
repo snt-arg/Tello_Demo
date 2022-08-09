@@ -1,4 +1,6 @@
-#using self-made keras model
+#using own keras model
+#WITH DIFFERENT MODES
+#
 import cv2
 from djitellopy import tello
 from keras.models import load_model
@@ -14,6 +16,8 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1)
 mpDraw = mp.solutions.drawing_utils
 
+key = cv2.waitKey(1)
+
 model = load_model('signlanguage.h5')
  
 pTime = 0
@@ -25,11 +29,11 @@ h,w,c =img.shape
 offset = 40
 img_counter = 0
 analysisframe = ''
-Possible_commands = ['Go','Stop','Up']
+Tello_commands = ['A', 'B', 'C', 'D','H','S','U','V','W','Y']
 
 
 #Tello Phases
-class Tello_Phase:
+'''class Tello_Phase:
     State = None
      
     def SwitchState(self, switch):
@@ -40,7 +44,7 @@ class Tello_Phase:
         elif switch == 3:
             self.State = 3
         else:
-            self.State = None
+            self.State = None'''
 while True:
 
 #getting stream+ begin of "hand"
@@ -52,22 +56,7 @@ while True:
     analysisframe = img
     showframe = analysisframe
 
-#hand
-
-    if results.multi_hand_landmarks:
-        for handLms in results.multi_hand_landmarks:
-            for id, lm in enumerate(handLms.landmark):
-                # print(id, lm)
-                h,w,c =img.shape
-                cx, cy = int(lm.x * w), int(lm.y * h)
-                print(id, cx, cy)
-                # if id == 4:
-                cv2.circle(img, (cx, cy), 5, (255, 0, 255), cv2.FILLED)
-            mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
-
-#box for hand
-            
-            continue
+#hand + box            
     if hand_landmarks:
         for handLMs in hand_landmarks:
             x_max = 0
@@ -93,47 +82,47 @@ while True:
             cTime = time.time()
             fps = 1 / (cTime - pTime)
             pTime = cTime
-            cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3,
+            cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_ITALIC, 3,
                         (255, 0, 255), 3)
-            cv2.imshow("Image", img)
 #resizing shape for keras
+            if key == ord("e"):
+                analysisframe = analysisframe[y_min:y_max, x_min:x_max]
+                cv2.imshow("Frame", showframe)
+                analysisframe = cv2.resize(analysisframe,(128,128))
+                analysisframe = np.reshape(analysisframe,[1,128,128,3])
+                analysisframe = analysisframe/255.0
 
-            analysisframe = analysisframe[y_min:y_max, x_min:x_max]
-            cv2.imshow("Frame", showframe)
-            analysisframe = cv2.resize(analysisframe,(128,128))
-            analysisframe = np.reshape(analysisframe,[1,128,128,3])
-            analysisframe = analysisframe/255.0
+                #RESIZING PROBLEM, again....(screenshot saved)
 
-            #RESIZING PROBLEM, again....(screenshot saved)
-
-            #implement condition for prediction
-
-            prediction = model.predict(analysisframe)
-            predarray = np.array(prediction[0])
-            letter_prediction_dict = {Possible_commands[i]: predarray[i] for i in range(len(Possible_commands))}
-            predarrayordered = sorted(predarray, reverse=True)
-            high1 = predarrayordered[0]
-            high2 = predarrayordered[1]
-            high3 = predarrayordered[2]
-            for key,value in letter_prediction_dict.items():
-                if value==high1:
-                    print("Order: ", key)
-                    print('Confidence 1: ', 100*value)
-                elif value==high2:
-                    print("Order: ", key)
-                    print('Confidence 2: ', 100*value)
-                elif value==high3:
-                    print("Order ", key)
-                    print('Confidence 3: ', 100*value)
+                #implement condition for prediction
+                
+                prediction = model.predict(analysisframe)
+                predarray = np.array(prediction[0])
+                letter_prediction_dict = {Tello_commands[i]: predarray[i] for i in range(len(Tello_commands))}
+                predarrayordered = sorted(predarray, reverse=True)
+                high1 = predarrayordered[0]
+                high2 = predarrayordered[1]
+                high3 = predarrayordered[2]
+                for key,value in letter_prediction_dict.items():
+                    if value==high1:
+                        print("Order: ", key)
+                        print('Confidence 1: ', 100*value)
+                    elif value==high2:
+                        print("Order: ", key)
+                        print('Confidence 2: ', 100*value)
+                    elif value==high3:
+                        print("Order ", key)
+                        print('Confidence 3: ', 100*value)
 
             cv2.imshow("Frame", img)
-
-            key =cv2.waitKey(1)
-            if key == ord("q"):
-                #Drone.streamoff()
-                cap.release()
-                cv2.destroyAllWindows()
-                break
+    else:
+          cv2.imshow("Frame", img)  
+    key =cv2.waitKey(1)
+    if key == ord("q"):
+        #Drone.streamoff()
+        cap.release()
+        cv2.destroyAllWindows()
+        break
             
 
     '''Different ways to see key input
