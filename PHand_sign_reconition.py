@@ -1,5 +1,6 @@
 #using own keras model
 #WITH DIFFERENT MODES
+#HAS TEXT problems for images...why?
 #
 import cv2
 from djitellopy import tello
@@ -113,6 +114,7 @@ while True:
                     elif value==high3:
                         print("Order ", key)
                         print('Confidence 3: ', 100*value)
+
 
             cv2.imshow("Frame", img)
     else:
