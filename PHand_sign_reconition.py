@@ -19,7 +19,7 @@ mpDraw = mp.solutions.drawing_utils
 
 key = cv2.waitKey(1)
 
-model = load_model('signlanguage.h5')
+model = load_model('11Handsigns(20Ep).h5')
  
 pTime = 0
 cTime = 0
@@ -30,7 +30,7 @@ h,w,c =img.shape
 offset = 40
 img_counter = 0
 analysisframe = ''
-Tello_commands = ['A', 'B', 'C', 'D','H','S','U','V','W','Y']
+Tello_commands = ['Backwards', 'Down', 'Forwards', 'FrontFlip','Land','Left','Right','TakeOff','TurnLeft','TurnRight','Up']
 
 
 #Tello Phases
@@ -74,8 +74,8 @@ while True:
                     y_max = y
                 if y < y_min:
                     y_min = y
-            cv2.rectangle(img, (x_min - offset, y_min - offset), (x_max + offset, y_max + offset), (0, 255, 0), 2)
-            mpDraw.draw_landmarks(img, handLMs, mpHands.HAND_CONNECTIONS)
+            #cv2.rectangle(img, (x_min - offset, y_min - offset), (x_max + offset, y_max + offset), (0, 255, 0), 2)
+            #mpDraw.draw_landmarks(img, handLMs, mpHands.HAND_CONNECTIONS)
 
 #frames per second on main image
 
