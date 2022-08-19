@@ -38,6 +38,7 @@ while True:
         imgCrop = img[y - offset:y + h + offset , x - offset:x + w + offset]
 
         imgCropShape = imgCrop.shape
+        print(img)
  
         aspectRatio = h/w
 
@@ -51,12 +52,25 @@ while True:
             if aspectRatio >1:
                 k = imgSize/h
                 wCal = math.ceil((k*w))
+                
 
                 imgResize = cv2.resize(imgCrop,(wCal,imgSize))
 
                 imgResizeshape = imgResize.shape
                 wGap = math.ceil((imgSize-wCal))
+                print(imgResize.shape)
                 imgWhite[:,wGap:wCal+wGap] = imgResize
+                print(imgWhite.shape)
+
+                '''print(k)
+                print(w)
+                print(h)
+                print("\n")
+                print(wCal)
+                print(imgResize.shape)
+                print(wGap)
+                print("\n")'''
+
             else:
                 k = imgSize/w
                 hCal = math.ceil((k*h) )
@@ -65,7 +79,11 @@ while True:
 
                 imgResizeshape = imgResize.shape
                 hGap = math.ceil((imgSize - hCal))
+
+                print(imgResize.shape)
+
                 imgWhite[hGap:hCal +hGap,:] = imgResize
+                print(imgWhite.shape)
 
         cv2.imshow("imgageWhite",imgWhite)
         

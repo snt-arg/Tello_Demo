@@ -125,7 +125,7 @@ while True:
                             if key == 'TakeOff' and not Drone.is_flying:
                                 Drone.takeoff() 
                                 #Drone.go_xyz_speed(0,0,100,100)
-                                time.sleep(3)
+                                time.sleep(4)
                                 Drone.move_up(50)
                                 print(key)
                                 cv2.putText(img, str(key), (10, 70), cv2.FONT_ITALIC, 3,
@@ -140,21 +140,21 @@ while True:
                                 cv2.imshow("Frame", img)
 
                             if key == 'Left'and Drone.is_flying:
-                                Drone.move_left(40)
+                                Drone.move_right(40)
                                 print(key)
                                 cv2.putText(img, str(key), (10, 70), cv2.FONT_ITALIC, 3,
                                 (255, 0, 255), 3)
                                 cv2.imshow("Frame", img)
 
                             if key == 'Right'and Drone.is_flying:
-                                Drone.move_right(40)
+                                Drone.move_left(40)
                                 print(key)
                                 cv2.putText(img, str(key), (10, 70), cv2.FONT_ITALIC, 3,
                                 (255, 0, 255), 3)
                                 cv2.imshow("Frame", img)
                     
                             if key == 'FrontFlip' and Drone.is_flying:
-                                Drone.flip_forward()
+                                Drone.flip_back()
                                 print(key)
                                 cv2.putText(img, str(key), (10, 70), cv2.FONT_ITALIC, 3,
                                 (255, 0, 255), 3)

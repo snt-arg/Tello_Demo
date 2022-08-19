@@ -19,7 +19,7 @@ mpDraw = mp.solutions.drawing_utils
 
 key = cv2.waitKey(1)
 
-model = load_model('11Handsigns(20Ep).h5')
+model = load_model('11Handsigns(40Ep).h5')
  
 pTime = 0
 cTime = 0
@@ -108,12 +108,7 @@ while True:
                     if value==high1:
                         print("Order: ", key)
                         print('Confidence 1: ', 100*value)
-                    elif value==high2:
-                        print("Order: ", key)
-                        print('Confidence 2: ', 100*value)
-                    elif value==high3:
-                        print("Order ", key)
-                        print('Confidence 3: ', 100*value)
+                   
 
 
             cv2.imshow("Frame", img)
