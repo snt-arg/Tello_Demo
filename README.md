@@ -1,23 +1,19 @@
 Tello_Demo
-This project aims to create a tello drone which can follow orders in real time through tello's camera.
+This project aimed to create a tello drone which can follow orders in real time.
 
-Step 1: Giving simple commands to tello to execute
-
-Step 2: Get the videostream of the tello
-
-Step 3: Detect a hand on that stream
-
-Step 4: recognise hand position
-
-Step 5: make it react to the hand's specific position(keras)
-
-Step 6: make it user friendly(like: follow face--> hands stay visible, refine keras algorithm)
-
-We are right now at step 6. 
-Tello can follow commands with handgestures. It may starts abrupt, or not at all. It has some problems recognising the correct gestures. It has a better timer and limitations(so, it can avoid resizing errors as much as possible)
+For now, this project has 2 operatable sketches with 2 entirely different approaches: One with images and one with landmarks which is a script I modified based on another one's.
 
 
+Images: Pro:
+            It can have as many commands as desired.
+        Contra:
+            Hand recognition fails quite often and wrong commands are given.
+
+Landmarks: Pro:
+            Almost always correct recognition.
+           Contra:
+           Limitation of 9 Commmands.
+           
+There are always pdf documents for the orders you can give the tello.
 
 
-    
- 
