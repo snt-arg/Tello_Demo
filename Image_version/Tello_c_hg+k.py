@@ -1,4 +1,4 @@
-#This is a final dokument. I consider the tello now as operatable and kid friendly. It is still a little too stupid
+#Tello commanding with hand gestures and keyboard
 
 from google.protobuf.json_format import MessageToDict
 from keras.models import load_model
@@ -246,7 +246,82 @@ while True:
                                         
 
                     Cnt = 0  
-    cv2.imshow("Frame", img)
+
+    else: 
+
+        cv2.destroyWindow("Order")
+        key = cv2.waitKey(1)
+        if key == ord("s") and Drone.is_flying:
+            Drone.send_rc_control(0,-100,0,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+        
+            cv2.imshow("Order", BACKWARDS_RESIZED)
+            
+        if key == ord("w") and Drone.is_flying:
+            Drone.send_rc_control(0,100,0,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+
+            cv2.imshow("Order", FORWARDS_RESIZED)
+
+        if key == ord("t") and Drone.is_flying:
+            Drone.send_rc_control(0,0,100,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+
+            cv2.imshow("Order",UP_RESIZED )
+
+        if key == ord("g") and Drone.is_flying:
+            Drone.send_rc_control(0,0,-100,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+        
+            cv2.imshow("Order", DOWN_RESIZED)
+
+        if key == ord("d") and Drone.is_flying:
+            Drone.send_rc_control(-100,0,0,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+            
+            cv2.imshow("Order", LEFT_RESIZED)
+
+        if key == ord("a") and Drone.is_flying:
+            Drone.send_rc_control(100,0,0,0)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+            
+            cv2.imshow("Order", RIGHT_RESIZED)
+
+        if key == ord("y") and Drone.is_flying:
+            Drone.flip_back()
+            print(key)
+            
+            cv2.imshow("Order",FLIP_RESIZED)
+
+        if key == ord("q")and Drone.is_flying:
+            Drone.send_rc_control(0,0,0,-100)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+            
+            cv2.imshow("Order", YAWcw_RESIZED)
+
+        if key == ord("e") and Drone.is_flying:
+            Drone.send_rc_control(0,0,0,100)
+            time.sleep(0.5)
+            Drone.send_rc_control(0,0,0,0)
+            print(key)
+            
+            cv2.imshow("Order", YAWccw_RESIZED)
+        cv2.moveWindow("Order",10,450) 
+        cv2.imshow("Frame", img)
 
     
    
@@ -256,21 +331,15 @@ while True:
     if Drone.is_flying:
         Drone.send_rc_control(0,0,0,0)
 
-    if key == ord("q"):
+    if key == 27:
         Drone.send_command_without_return("land")
         Drone.streamoff()
         cv2.destroyAllWindows()
         break
     
-    if key == ord("s"):
+    if key == ord("r"):
         cv2.imshow("Order",TAKEOFF_RESIZED)
         Drone.takeoff()
         Drone.send_rc_control(0,0,100,0)
         time.sleep(0.5)
         Drone.send_rc_control(0,0,0,0)
-
-    if key == ord("U"):
-        Drone.send_rc_control(0,0,-100,0)
-        time.sleep(0.5)
-        Drone.send_rc_control(0,0,0,0)
-        print(key)

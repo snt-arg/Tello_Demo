@@ -163,7 +163,7 @@ def main():
                         cv.imshow("Order", RIGHT_RESIZED)
 
                     if hand_sign_id == 3 and Drone.is_flying:
-                        Drone.flip_forward()
+                        Drone.flip_back()
                         print("flip")
                         print(hand_sign_id)
                         cv.imshow("Order",FLIP_RESIZED)
