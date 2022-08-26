@@ -1,4 +1,9 @@
 Tello_Demo
+
+
+USE Landmark_version for Demo
+I added a pdf. document for the possible commands to give.
+
 This project aimed to create a tello drone which can follow orders in real time.
 
 For now, this project has 2 operatable sketches with 2 entirely different approaches: One with images and one with landmarks which is a script I modified based on another one's.
@@ -14,6 +19,9 @@ Landmarks: Pro:
            Contra:
            Limitation of 9 Commmands.
            
-There are always pdf documents for the orders you can give the tello.
+
+
+
+
 
 

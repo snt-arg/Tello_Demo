@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-# The original version of this code can be found on Git hub: https://github.com/kinivi/hand-gesture-recognition-mediapipe
+# The documents this code is built upon can be found on Git hub: https://github.com/kinivi/hand-gesture-recognition-mediapipe
 # and has been written by Kinivi. I would recommend his program further since it is easy to modify and can be used in other ways too.
 
 #This program recognises 9 specific hand gestures and makes a tello drone then fly appropriatly.
 # -*- coding: utf-8 -*-
 
+# There are 3 commands for the keyboard(only as a help): "s" for takeoff; "q" for break the entire program and land; "u" go down
 import csv
 import copy
 import argparse
