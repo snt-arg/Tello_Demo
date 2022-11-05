@@ -11,12 +11,12 @@ import time
 import cv2
 
 
-Drone = tello.Tello()
+'''Drone = tello.Tello()
 Drone.connect()
-Drone.streamon()
+Drone.streamon()'''
 
 Cnt = 0
-#cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.9,min_tracking_confidence=0.8)
 mpDraw = mp.solutions.drawing_utils
@@ -67,8 +67,8 @@ Tello_commands = ['Backwards', 'Down', 'Forwards', 'FrontFlip','Land','Left','Ri
 
 
 while True:
-    #success, img = cap.read()
-    img = Drone.get_frame_read().frame
+    success, img = cap.read()
+    #img = Drone.get_frame_read().frame
     img = cv2.flip(img, 1) 
     h,w,c =img.shape
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -76,14 +76,14 @@ while True:
     hand_landmarks = results.multi_hand_landmarks
     analysisframe = img.copy()
 
-    Battery = Drone.get_battery()
+    '''Battery = Drone.get_battery()
     Height = Drone.get_height()
     FLightTime = Drone.get_flight_time()
     Temperature = Drone.get_highest_temperature()
     cv2.putText(img,"Temperature :"+str(Temperature),(10,150),FONT_ITALIC,1,(255,255,255),2,4)
     cv2.putText(img,"Battery: "+str(Battery),(10,200),FONT_ITALIC,1,(255,255,255),2,4)
     cv2.putText(img,"Height: "+str(Height),(10,250),FONT_ITALIC,1,(255,255,255),2,4)
-    cv2.putText(img,"FLightTime: "+str(FLightTime),(10,300),FONT_ITALIC,1,(255,255,255),2,4)
+    cv2.putText(img,"FLightTime: "+str(FLightTime),(10,300),FONT_ITALIC,1,(255,255,255),2,4)'''
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
@@ -159,7 +159,7 @@ while True:
                             print("Order: ", key)
                             print('Confidence 1: ', round(100*value),1)
 
-                            if key == 'TakeOff' and not Drone.is_flying:
+                            '''if key == 'TakeOff' and not Drone.is_flying:
                                 Drone.takeoff()
                                 Drone.send_rc_control(0,0,100,0)
                                 time.sleep(0.5)
@@ -242,7 +242,7 @@ while True:
                                 print(key)
                                 
                                 cv2.imshow("Order", YAWccw_RESIZED)
-                            cv2.moveWindow("Order",10,450)
+                            cv2.moveWindow("Order",10,450)'''
                                         
 
                     Cnt = 0  
@@ -251,7 +251,7 @@ while True:
 
         cv2.destroyWindow("Order")
         key = cv2.waitKey(1)
-        if key == ord("s") and Drone.is_flying:
+        '''if key == ord("s") and Drone.is_flying:
             Drone.send_rc_control(0,-100,0,0)
             time.sleep(0.5)
             Drone.send_rc_control(0,0,0,0)
@@ -319,16 +319,16 @@ while True:
             Drone.send_rc_control(0,0,0,0)
             print(key)
             
-            cv2.imshow("Order", YAWccw_RESIZED)
+            cv2.imshow("Order", YAWccw_RESIZED)'''
         cv2.moveWindow("Order",10,450) 
         cv2.imshow("Frame", img)
 
     
    
-        
+'''          
     #Drone stabaliser
-    key =cv2.waitKey(1)
-    if Drone.is_flying:
+   key =cv2.waitKey(1)
+   if Drone.is_flying:
         Drone.send_rc_control(0,0,0,0)
 
     if key == 27:
@@ -343,3 +343,4 @@ while True:
         Drone.send_rc_control(0,0,100,0)
         time.sleep(0.5)
         Drone.send_rc_control(0,0,0,0)
+'''
