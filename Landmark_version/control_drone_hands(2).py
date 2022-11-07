@@ -67,7 +67,6 @@ FLIP_RESIZED = cv.resize(FLIP, (StaticImgResize, StaticImgResize))
 
 def get_args():
     parser = argparse.ArgumentParser()
-
     parser.add_argument("--device", type=int, default=0)
     parser.add_argument("--width", help='cap width', type=int, default=1280)
     parser.add_argument("--height", help='cap height', type=int, default=720)
@@ -81,6 +80,7 @@ def main():
     use_brect = True
     #cap = cv.VideoCapture(0)
 
+    # mediapipe hand definition
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         max_num_hands=2,
@@ -90,7 +90,7 @@ def main():
 
     keypoint_classifier = KeyPointClassifier()
 
-    # Read labels
+    # Read labels of file
     with open('model/keypoint_classifier/keypoint_classifier_label.csv',
               encoding='utf-8-sig') as f:
         keypoint_classifier_labels = csv.reader(f)
@@ -129,6 +129,7 @@ def main():
 
                 Cnt += 1
                 # print(Cnt)
+
                 # Bounding box calculation
                 brect = calc_bounding_rect(debug_image, hand_landmarks)
                 # Landmark calculation
@@ -140,6 +141,7 @@ def main():
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
                 Right = False
                 Left = False
+
                 # making difference between left/right
                 label = MessageToDict(handedness)[
                     'classification'][0]['label']
@@ -430,69 +432,10 @@ def draw_landmarks(image, landmark_point):
 
     # Key Points
     for index, landmark in enumerate(landmark_point):
-        if index == 0:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 1:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 2:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 3:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 4:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
-                      -1)
-        if index == 5:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 6:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 7:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 8:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
-                      -1)
-        if index == 9:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 10:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 11:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 12:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
-                      -1)
-        if index == 13:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 14:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 15:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 16:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
-                      -1)
-        if index == 17:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 18:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 19:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
-                      -1)
-        if index == 20:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
-                      -1)
+        if index % 4 == 0 and index > 0:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0), -1)
+        else:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0), -1)
     return image
 
 
