@@ -24,9 +24,9 @@ from sklearn.metrics import classification_report
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 from google.protobuf.json_format import MessageToDict
-Drone = tello.Tello()
-Drone.connect()
-Drone.streamon()
+#Drone = tello.Tello()
+# Drone.connect()
+# Drone.streamon()
 StaticImgResize = 300
 offset = 100
 
@@ -78,7 +78,7 @@ def get_args():
 def main():
     # Argument parsing
     use_brect = True
-    #cap = cv.VideoCapture(0)
+    cap = cv.VideoCapture(0)
 
     # mediapipe hand definition
     mp_hands = mp.solutions.hands
@@ -105,15 +105,17 @@ def main():
     while True:
         fps = cvFpsCalc.get()
         key = cv.waitKey(1)
-        #success, image = cap.read()
+        success, image = cap.read()
 
         # Camera capture
-        image = Drone.get_frame_read().frame
+        #image = Drone.get_frame_read().frame
 
         if image is None:
             continue
+
         image = cv.flip(image, 1)  # Mirror display
         debug_image = copy.deepcopy(image)
+        cv.imshow('frame', image)
 
         # Detection implementation
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
@@ -155,6 +157,7 @@ def main():
                     current_left_handsign_id = keypoint_classifier(
                         pre_processed_landmark_list)
                     HandSignList.insert(0, str(current_left_handsign_id)+"L")
+
                 debug_image = draw_bounding_rect(use_brect, debug_image, brect)
                 debug_image = draw_landmarks(debug_image, landmark_list)
                 debug_image = draw_info_text(
@@ -164,8 +167,9 @@ def main():
                     keypoint_classifier_labels[hand_sign_id],
                     str(hand_sign_id),
                 )
+                # Drawing part
 
-            if Cnt >= 50:
+            '''if Cnt >= 50:
                 # print(HandSignList)
                 print(tuple(HandSignList))
                 Cnt = 0
@@ -258,7 +262,7 @@ def main():
                         case ('8L', '2R'):
                             print("flip")
                             cv.imshow("Order", FLIP_RESIZED)
-                            '''Drone.flip_forward()
+                            Drone.flip_forward()
                             time.sleep(0.2)
                             Drone.flip_right()
                             time.sleep(0.2)
@@ -266,11 +270,9 @@ def main():
                             time.sleep(0.2)
                             Drone.flip_left()
                             time.sleep(0.2)
-                            Drone.flip_forward()'''
+                            Drone.flip_forward()
 
-                # Drawing part
-        debug_image = draw_info(debug_image, fps, mode, number)
-        cv.imshow('Hand Gesture Recognition', debug_image)
+        
 
         Ukey = cv.waitKey(0)
         # drone stabiliser
@@ -294,6 +296,10 @@ def main():
             time.sleep(0.5)
             Drone.send_rc_control(0, 0, 0, 0)
             print(key)
+'''
+        debug_image = draw_info(debug_image, fps, mode, number)
+        cv.imshow('Hand Gesture Recognition', debug_image)
+        cv.destroyAllWindows()
 
 
 def calc_bounding_rect(image, landmarks):
@@ -432,10 +438,69 @@ def draw_landmarks(image, landmark_point):
 
     # Key Points
     for index, landmark in enumerate(landmark_point):
-        if index % 4 == 0 and index > 0:
-            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0), -1)
-        else:
-            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0), -1)
+        if index == 0:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 1:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 2:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 3:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 4:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
+                      -1)
+        if index == 5:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 6:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 7:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 8:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
+                      -1)
+        if index == 9:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 10:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 11:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 12:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
+                      -1)
+        if index == 13:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 14:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 15:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 16:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
+                      -1)
+        if index == 17:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 18:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 19:
+            cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
+                      -1)
+        if index == 20:
+            cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
+                      -1)
     return image
 
 
