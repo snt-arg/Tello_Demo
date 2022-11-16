@@ -24,9 +24,9 @@ from sklearn.metrics import classification_report
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 from google.protobuf.json_format import MessageToDict
-#Drone = tello.Tello()
-# Drone.connect()
-# Drone.streamon()
+Drone = tello.Tello()
+Drone.connect()
+Drone.streamon()
 StaticImgResize = 300
 offset = 100
 
@@ -78,13 +78,13 @@ def get_args():
 def main():
     # Argument parsing
     use_brect = True
-    cap = cv.VideoCapture(0)
+    #cap = cv.VideoCapture(0)
 
     # mediapipe hand definition
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         max_num_hands=2,
-        min_detection_confidence=0.9,
+        min_detection_confidence=0.8,
         min_tracking_confidence=0.8,
     )
 
@@ -105,10 +105,10 @@ def main():
     while True:
         fps = cvFpsCalc.get()
         key = cv.waitKey(1)
-        success, image = cap.read()
+        #uccess, image = cap.read()
 
         # Camera capture
-        #image = Drone.get_frame_read().frame
+        image = Drone.get_frame_read().frame
 
         if image is None:
             continue
@@ -169,7 +169,7 @@ def main():
                 )
                 # Drawing part
 
-            '''if Cnt >= 50:
+            if Cnt >= 50:
                 # print(HandSignList)
                 print(tuple(HandSignList))
                 Cnt = 0
@@ -177,85 +177,84 @@ def main():
                 if not Drone.is_flying:
                     match tuple(HandSignList):
                         # 2_takeoff
-                        case ('6L', '6R'):
+                        case ('6L', '6R') | ('1R',):
                             print("takeoff")
                             print(hand_sign_id)
                             cv.imshow("Order", TAKEOFF_RESIZED)
-                            # Drone.takeoff()
+                            Drone.takeoff()
                             time.sleep(0.5)
-                            # Drone.send_rc_control(0,0,100,0)
-                            # Drone.send_rc_control(0,0,0,0)
+
                 if Drone.is_flying:
                     match tuple(HandSignList):
 
                         # 1_land
-                        case ('0L', '0R') | ('1R',):
+                        case ('0L', '0R'):
                             print("land")
                             cv.imshow("Order", LAND_RESIZED)
-                            # Drone.land()
+                            Drone.land()
                             time.sleep(0.5)
-                            # Drone.send_rc_control(0,0,0,0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 3_right
                         case('0L', '1R'):
                             print("Right")
                             cv.imshow("Order", RIGHT_RESIZED)
-                            #Drone.send_rc_control(100, 0, 0, 0)
+                            Drone.send_rc_control(100, 0, 0, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 4_left
                         case('0L', '2R'):
                             print("Left")
                             cv.imshow("Order", LEFT_RESIZED)
-                            #Drone.send_rc_control(-100, 0, 0, 0)
+                            Drone.send_rc_control(-100, 0, 0, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 5_up
                         case ('1L', '6R'):
                             print("Up")
                             cv.imshow("Order", UP_RESIZED)
-                            #Drone.send_rc_control(0, 0, 100, 0)
+                            Drone.send_rc_control(0, 0, 100, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 6_down
                         case ('1L', '7R'):
                             print("Down")
                             cv.imshow("Order", DOWN_RESIZED)
-                            #Drone.send_rc_control(0, 0, -100, 0)
+                            Drone.send_rc_control(0, 0, -100, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 7_forwards
                         case ('0L', '4R'):
                             print("forwards")
                             cv.imshow("Order", FORWARDS_RESIZED)
-                            # Drone.send_rc_control(0,100,0,0)
+                            Drone.send_rc_control(0, 100, 0, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 8_backwards
                         case ('0L', '5R'):
                             print("backwards")
                             cv.imshow("Order", BACKWARDS_RESIZED)
-                            # Drone.send_rc_control(0,-100,0,0)
+                            Drone.send_rc_control(0, -100, 0, 0)
                             time.sleep(0.5)
-                            #Drone.send_rc_control(0, 0, 0, 0)
+                            Drone.send_rc_control(0, 0, 0, 0)
 
                         # 9_flip(a)
-                        case ('6L', '2R'):
+                        case ('0L', '3R'):
                             print("flip")
                             cv.imshow("Order", FLIP_RESIZED)
-                            # Drone.flip_back()
+                            Drone.flip_back()
                             time.sleep(0.5)
 
                         # 10_flip(b)
                         case ('6L', '4R'):
                             print("flip")
                             cv.imshow("Order", FLIP_RESIZED)
-                            # Drone.flip_back()
+                            Drone.flip_back()
                             time.sleep(0.5)
 
                         # 11 FLIP MAYHEM
@@ -272,9 +271,10 @@ def main():
                             time.sleep(0.2)
                             Drone.flip_forward()
 
-        
+        debug_image = draw_info(debug_image, fps, mode, number)
+        cv.imshow('Hand Gesture Recognition', debug_image)
 
-        Ukey = cv.waitKey(0)
+        Ukey = cv.waitKey(1)
         # drone stabiliser
         if Drone.is_flying:
             Drone.send_rc_control(0, 0, 0, 0)
@@ -296,10 +296,8 @@ def main():
             time.sleep(0.5)
             Drone.send_rc_control(0, 0, 0, 0)
             print(key)
-'''
-        debug_image = draw_info(debug_image, fps, mode, number)
-        cv.imshow('Hand Gesture Recognition', debug_image)
-        cv.destroyAllWindows()
+
+        # cv.destroyAllWindows() note to future self: DO NOT USE THAT-->(blinks like crazy-->hurts)
 
 
 def calc_bounding_rect(image, landmarks):
