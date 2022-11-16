@@ -2,7 +2,7 @@
 # The documents this code is built upon can be found on Git hub: https://github.com/kinivi/hand-gesture-recognition-mediapipe
 # and has been written by Kinivi. I would recommend his program further since it is easy to modify and can be used in other ways too.
 
-#This program recognises 9 specific hand gestures and makes a tello drone then fly appropriatly.
+# This program recognises 9 specific hand gestures and makes a tello drone then fly appropriatly.
 # -*- coding: utf-8 -*-
 
 # There are 3 commands for the keyboard(only as a help): "s" for takeoff; "q" for break the entire program and land; "u" go down
@@ -30,38 +30,37 @@ StaticImgResize = 300
 offset = 100
 
 TAKEOFF = cv.imread('Tello_Command_Images/TAKEOFF.png')
-TAKEOFF_RESIZED = cv.resize(TAKEOFF,(StaticImgResize,StaticImgResize))
+TAKEOFF_RESIZED = cv.resize(TAKEOFF, (StaticImgResize, StaticImgResize))
 
 LAND = cv.imread('Tello_Command_Images/LAND.png')
-LAND_RESIZED = cv.resize(LAND,(StaticImgResize,StaticImgResize))
+LAND_RESIZED = cv.resize(LAND, (StaticImgResize, StaticImgResize))
 
 LEFT = cv.imread('Tello_Command_Images/LEFT.png')
-LEFT_RESIZED = cv.resize(LEFT,(StaticImgResize,StaticImgResize))
+LEFT_RESIZED = cv.resize(LEFT, (StaticImgResize, StaticImgResize))
 
 RIGHT = cv.imread('Tello_Command_Images/RIGHT.png')
-RIGHT_RESIZED = cv.resize(RIGHT,(StaticImgResize,StaticImgResize))
+RIGHT_RESIZED = cv.resize(RIGHT, (StaticImgResize, StaticImgResize))
 
 BACKWARDS = cv.imread('Tello_Command_Images/BACKWARDS.jpg')
-BACKWARDS_RESIZED = cv.resize(BACKWARDS,(StaticImgResize,StaticImgResize))
+BACKWARDS_RESIZED = cv.resize(BACKWARDS, (StaticImgResize, StaticImgResize))
 
 FORWARDS = cv.imread('Tello_Command_Images/FORWARDS.jpg')
-FORWARDS_RESIZED = cv.resize(FORWARDS,(StaticImgResize,StaticImgResize))
+FORWARDS_RESIZED = cv.resize(FORWARDS, (StaticImgResize, StaticImgResize))
 
 UP = cv.imread('Tello_Command_Images/UP.png')
-UP_RESIZED = cv.resize(UP,(StaticImgResize,StaticImgResize))
+UP_RESIZED = cv.resize(UP, (StaticImgResize, StaticImgResize))
 
 DOWN = cv.imread('Tello_Command_Images/DOWN.png')
-DOWN_RESIZED = cv.resize(DOWN,(StaticImgResize,StaticImgResize))
+DOWN_RESIZED = cv.resize(DOWN, (StaticImgResize, StaticImgResize))
 
 YAWcw = cv.imread('Tello_Command_Images/YAWcw.jpeg')
-YAWcw_RESIZED = cv.resize(YAWcw,(StaticImgResize,StaticImgResize))
+YAWcw_RESIZED = cv.resize(YAWcw, (StaticImgResize, StaticImgResize))
 
 YAWccw = cv.imread('Tello_Command_Images/YAWccw.jpeg')
-YAWccw_RESIZED = cv.resize(YAWccw,(StaticImgResize,StaticImgResize))
+YAWccw_RESIZED = cv.resize(YAWccw, (StaticImgResize, StaticImgResize))
 
 FLIP = cv.imread('Tello_Command_Images/FLIP.jpeg')
-FLIP_RESIZED = cv.resize(FLIP,(StaticImgResize,StaticImgResize))
-
+FLIP_RESIZED = cv.resize(FLIP, (StaticImgResize, StaticImgResize))
 
 
 def get_args():
@@ -76,7 +75,7 @@ def get_args():
 
 
 def main():
-    # Argument parsing 
+    # Argument parsing
     use_brect = True
 
     mp_hands = mp.solutions.hands
@@ -97,7 +96,7 @@ def main():
         ]
 
     cvFpsCalc = CvFpsCalc(buffer_len=10)
-    mode, number = 0,0
+    mode, number = 0, 0
     Cnt = 0
 
     while True:
@@ -119,10 +118,10 @@ def main():
         image.flags.writeable = True
 
         if results.multi_hand_landmarks is not None:
-            
+
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks,
                                                   results.multi_handedness):
-                
+
                 Cnt += 1
                 # Bounding box calculation
                 brect = calc_bounding_rect(debug_image, hand_landmarks)
@@ -133,31 +132,31 @@ def main():
                     landmark_list)
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                
+
                 if Cnt >= 50:
                     cv.destroyWindow("Order")
-                    #print(hand_sign_id)
+                    # print(hand_sign_id)
                     if hand_sign_id == 0 and Drone.is_flying:
                         Drone.land()
-                        cv.imshow("Order",LAND_RESIZED)
+                        cv.imshow("Order", LAND_RESIZED)
                         time.sleep(0.5)
-                        Drone.send_rc_control(0,0,0,0)
+                        Drone.send_rc_control(0, 0, 0, 0)
                         print("land")
                         print(hand_sign_id)
 
                     if hand_sign_id == 1 and not Drone.is_flying:
                         Drone.takeoff()
-                        cv.imshow("Order",TAKEOFF_RESIZED)
+                        cv.imshow("Order", TAKEOFF_RESIZED)
                         time.sleep(0.5)
-                        Drone.send_rc_control(0,0,100,0)
+                        Drone.send_rc_control(0, 0, 100, 0)
                         print("takeoff")
                         print(hand_sign_id)
-                        Drone.send_rc_control(0,0,0,0)
+                        Drone.send_rc_control(0, 0, 0, 0)
 
                     if hand_sign_id == 2 and Drone.is_flying:
-                        Drone.send_rc_control(100,0,0,0)
+                        Drone.send_rc_control(100, 0, 0, 0)
                         time.sleep(0.5)
-                        Drone.send_rc_control(0,0,0,0)
+                        Drone.send_rc_control(0, 0, 0, 0)
                         print("Right")
                         print(hand_sign_id)
                         cv.imshow("Order", RIGHT_RESIZED)
@@ -167,45 +166,44 @@ def main():
                         time.sleep(0.5)
                         print("flip")
                         print(hand_sign_id)
-                        cv.imshow("Order",FLIP_RESIZED)
+                        cv.imshow("Order", FLIP_RESIZED)
 
                     if hand_sign_id == 4 and Drone.is_flying:
-                        Drone.send_rc_control(0,100,0,0)
+                        Drone.send_rc_control(0, 100, 0, 0)
                         time.sleep(0.5)
                         print("forwards")
                         print(hand_sign_id)
                         cv.imshow("Order", FORWARDS_RESIZED)
 
                     if hand_sign_id == 5 and Drone.is_flying:
-                        Drone.send_rc_control(0,-100,0,0)
+                        Drone.send_rc_control(0, -100, 0, 0)
                         time.sleep(0.5)
                         print("backwards")
                         print(hand_sign_id)
                         cv.imshow("Order", BACKWARDS_RESIZED)
-                        
+
                     if hand_sign_id == 6 and Drone.is_flying:
-                        Drone.send_rc_control(0,0,100,0)
+                        Drone.send_rc_control(0, 0, 100, 0)
                         time.sleep(0.5)
                         print("Up")
                         print(hand_sign_id)
-                        cv.imshow("Order",UP_RESIZED )
+                        cv.imshow("Order", UP_RESIZED)
 
                     if hand_sign_id == 7 and Drone.is_flying:
-                        Drone.send_rc_control(0,0,-100,0)
+                        Drone.send_rc_control(0, 0, -100, 0)
                         time.sleep(0.5)
                         print("Down")
                         print(hand_sign_id)
                         cv.imshow("Order", DOWN_RESIZED)
 
-                    
                     if hand_sign_id == 8 and Drone.is_flying:
-                        Drone.send_rc_control(-100,0,0,0)
+                        Drone.send_rc_control(-100, 0, 0, 0)
                         time.sleep(0.5)
-                        Drone.send_rc_control(0,0,0,0)
+                        Drone.send_rc_control(0, 0, 0, 0)
                         print("Left")
                         print(hand_sign_id)
                         cv.imshow("Order", LEFT_RESIZED)
-                    
+
                     Cnt = 0
 
                 # Drawing part
@@ -221,9 +219,8 @@ def main():
 
         debug_image = draw_info(debug_image, fps, mode, number)
         cv.imshow('Hand Gesture Recognition', debug_image)
-        
-        
-        Ukey = cv.waitKey(1)
+
+        '''Ukey = cv.waitKey(1)
         if Drone.is_flying:
             Drone.send_rc_control(0,0,0,0)
 
@@ -262,10 +259,10 @@ def main():
             Drone.send_rc_control(0,-100,0,0)
             time.sleep(0.5)
             Drone.send_rc_control(0,0,0,0)
-            print(key)
-        
+            print(key)'''
 
     cv.destroyAllWindows()
+
 
 def calc_bounding_rect(image, landmarks):
     image_width, image_height = image.shape[1], image.shape[0]
@@ -326,6 +323,7 @@ def pre_process_landmark(landmark_list):
     temp_landmark_list = list(map(normalize_, temp_landmark_list))
 
     return temp_landmark_list
+
 
 def draw_landmarks(image, landmark_point):
     if len(landmark_point) > 0:
@@ -402,52 +400,52 @@ def draw_landmarks(image, landmark_point):
 
     # Key Points
     for index, landmark in enumerate(landmark_point):
-        if index == 0:  
+        if index == 0:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 1: 
+        if index == 1:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 2:  
+        if index == 2:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 3: 
+        if index == 3:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 4:  
+        if index == 4:
             cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
                       -1)
-        if index == 5: 
+        if index == 5:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 6: 
+        if index == 6:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 7:  
+        if index == 7:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 8:  
+        if index == 8:
             cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
                       -1)
-        if index == 9: 
+        if index == 9:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 10: 
+        if index == 10:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 11:  
+        if index == 11:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 12:  
+        if index == 12:
             cv.circle(image, (landmark[0], landmark[1]), 8, (204, 0, 0),
                       -1)
-        if index == 13: 
+        if index == 13:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 14: 
+        if index == 14:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
-        if index == 15:  
+        if index == 15:
             cv.circle(image, (landmark[0], landmark[1]), 5, (204, 0, 0),
                       -1)
         if index == 16:
@@ -472,9 +470,10 @@ def draw_bounding_rect(use_brect, image, brect):
     if use_brect:
         # Outer rectangle
         cv.rectangle(image, (brect[0], brect[1]), (brect[2], brect[3]),
-                     (255,20,147), 4)
+                     (255, 20, 147), 4)
 
     return image
+
 
 def draw_info_text(image, brect, handedness, hand_sign_text,
                    finger_gesture_text):
@@ -485,8 +484,7 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     if hand_sign_text != "":
         info_text = info_text + ': ' + hand_sign_text
     cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
-               cv.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 2, cv.LINE_AA)
-        
+               cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2, cv.LINE_AA)
 
     if finger_gesture_text != "":
         cv.putText(image, info_text, (10, 350),
@@ -494,6 +492,7 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
                    cv.LINE_AA)
 
     return image
+
 
 def draw_info(image, fps, mode, number):
     cv.putText(image, "FPS:" + str(fps), (10, 390), cv.FONT_HERSHEY_SIMPLEX,
